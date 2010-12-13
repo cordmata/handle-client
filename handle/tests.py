@@ -28,7 +28,7 @@ class HandleClientTest(unittest.TestCase):
         hdl = self.client.create(self.target, self.prefix, self.suffix)
         
         # ensure the returned value looks like we expect
-        self.assertEqual('%s%s' % (self.HDL_SERVER_BASE, self.handle), hdl)
+        self.assertEqual(self.handle, hdl)
         
         # ensure we can not create one that already exists
         self.assertRaises(HandleExists, self.client.create, self.target,
@@ -39,7 +39,7 @@ class HandleClientTest(unittest.TestCase):
         
         # test that we can update the target
         hdl = self.client.update(self.handle, self.new_target)
-        self.assertEqual('%s%s' % (self.HDL_SERVER_BASE, self.handle), hdl)
+        self.assertEqual(self.handle, hdl)
         self.assertEqual(self.client.read(self.handle), self.new_target)
         
         # ensure we can delete
@@ -54,7 +54,7 @@ class HandleClientTest(unittest.TestCase):
         
         # tell the update method to create it if not found
         hdl = self.client.update(self.handle, self.target, create=True)
-        self.assertEqual('%s%s' % (self.HDL_SERVER_BASE, self.handle), hdl)
+        self.assertEqual(self.handle, hdl)
 
         self.client.delete(self.handle)
         
