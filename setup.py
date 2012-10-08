@@ -2,10 +2,10 @@ from setuptools import setup, find_packages
 
 setup(
     name = "py-handleclient",
-    version = "0.1",
+    version = "0.5",
     packages = find_packages(),
     install_requires = [
-        'httplib2 >= 0.6.0'
+        'requests >= 0.14'
     ],
     author = "Matt Cordial",
     author_email = "matt.cordial@asu.edu",
