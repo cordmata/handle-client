@@ -20,11 +20,13 @@ from handle import Client
 client = Client("http://your.server.org/handle-service/", "handleAdmin", "yourPass")
 
 client.create("2286.9/test", "http://example.org")
+#>>> http://hdl.handle.net/2286.9/test
 
 client.read("2286.9/test")
 #>>> http://example.org
 
 client.update("2286.9/test", "http://new.example.org")
+#>>> http://hdl.handle.net/2286.9/test
 
 client.delete("2286.9/test")
 ```
