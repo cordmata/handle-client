@@ -36,7 +36,8 @@ class Client(object):
             self.URL(handle),
             data={"target": target},
             headers=NO_CACHE,
-            auth=self.auth
+            auth=self.auth,
+            verify=False
         )
         if resp.status_code is 201:
             return resp.headers.get("location")
@@ -50,7 +51,12 @@ class Client(object):
 
         @return: URL the handle will resolve to.
         """
-        resp = requests.get(self.URL(handle), auth=self.auth, headers=NO_CACHE)
+        resp = requests.get(
+            self.URL(handle),
+            auth=self.auth,
+            headers=NO_CACHE,
+            verify=False
+        )
         if resp.status_code is 204:
             return resp.headers.get("location")
         raise HandleError(resp.status_code)
@@ -68,7 +74,8 @@ class Client(object):
             self.URL(handle),
             params={"target": target},
             auth=self.auth,
-            headers=NO_CACHE
+            headers=NO_CACHE,
+            verify=False
         )
         status = resp.status_code
         if status is 201 or status is 204:
@@ -82,7 +89,8 @@ class Client(object):
         resp = requests.delete(
             self.URL(handle),
             auth=self.auth,
-            headers=NO_CACHE
+            headers=NO_CACHE,
+            verify=False
         )
         if resp.status_code is not 204:
             raise HandleError(resp.status_code)
