@@ -1,18 +1,18 @@
-from os.path import join
-from urllib import quote
-
 import requests
-
-NO_CACHE = {"Cache-Control": "no-cache"}
 
 
 class Client(object):
-    """This is a client for interacting with the ASU Handle
-    Administration Web Service."""
+    """Client for interacting with the ASU Handle  Web Service."""
 
     def __init__(self, url, username, password):
-        self.baseurl = url.rstrip("/")
-        self.auth = (username, password)
+        self.baseurl = url.rstrip('/') + '/'
+        self.session = requests.Session()
+        self.session.auth = (username, password)
+        self.session.verify = False
+        self.session.headers.update({
+            'Cache-Control': 'no-cache',
+            'User-Agent': 'asu-handle-client'
+        })
 
     def create(self, handle, target):
         """
@@ -32,12 +32,9 @@ class Client(object):
 
             Example: '2286.9/af4y7fkd'
         """
-        resp = requests.post(
-            self.URL(handle),
-            data={"target": target},
-            headers=NO_CACHE,
-            auth=self.auth,
-            verify=False
+
+        resp = self.session.post(
+            self.baseurl + handle, data={"target": target}
         )
         if resp.status_code is 201:
             return resp.headers.get("location")
@@ -50,13 +47,9 @@ class Client(object):
         @param handle: in the form of 'prefix/suffix'
 
         @return: URL the handle will resolve to.
+
         """
-        resp = requests.get(
-            self.URL(handle),
-            auth=self.auth,
-            headers=NO_CACHE,
-            verify=False
-        )
+        resp = self.session.get(self.baseurl + handle)
         if resp.status_code is 204:
             return resp.headers.get("location")
         raise HandleError(resp.status_code)
@@ -69,13 +62,10 @@ class Client(object):
         @param target: Valid URL of the new target.
 
         @return: The handle that was either updated or created.
+
         """
-        resp = requests.put(
-            self.URL(handle),
-            params={"target": target},
-            auth=self.auth,
-            headers=NO_CACHE,
-            verify=False
+        resp = self.session.put(
+            self.baseurl + handle, params={"target": target}
         )
         status = resp.status_code
         if status is 201 or status is 204:
@@ -86,17 +76,10 @@ class Client(object):
         """Remove the handle completely from the registry.
 
         @param handle: The handle to remove."""
-        resp = requests.delete(
-            self.URL(handle),
-            auth=self.auth,
-            headers=NO_CACHE,
-            verify=False
-        )
+        resp = self.session.delete(self.baseurl + handle)
         if resp.status_code is not 204:
             raise HandleError(resp.status_code)
 
-    def URL(self, handle):
-        return join(self.baseurl, quote(handle))
 
 class HandleError(Exception):
 
