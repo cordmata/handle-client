@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="py-handleclient",
-    version="0.6",
+    version="0.6.1",
     packages=find_packages(),
     install_requires=[
         'requests >= 2.0'
@@ -13,5 +13,5 @@ setup(
         "A client which communicates with the Handle Administration "
         "Web Service."
     ),
-    keywords="cnri handle server web-service",
+    keywords="cnri handle.net web-service",
 )

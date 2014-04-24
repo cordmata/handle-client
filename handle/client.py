@@ -4,11 +4,11 @@ import requests
 class Client(object):
     """Client for interacting with the ASU Handle  Web Service."""
 
-    def __init__(self, url, username, password):
+    def __init__(self, url, username, password, verify_ssl=True):
         self.baseurl = url.rstrip('/') + '/'
         self.session = requests.Session()
         self.session.auth = (username, password)
-        self.session.verify = False
+        self.session.verify = verify_ssl
         self.session.headers.update({
             'Cache-Control': 'no-cache',
             'User-Agent': 'asu-handle-client'
